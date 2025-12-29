@@ -76,23 +76,27 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50">
-        <div className="px-4 py-4 max-w-lg mx-auto">
-          <div className="mb-4">
-            <p className="text-muted-foreground text-sm">{getGreeting()}</p>
-            <h1 className="text-2xl font-display font-bold text-foreground">
-              {user?.name?.split(' ')[0]} 👋
-            </h1>
+        <div className="px-4 py-4 max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="mb-4 lg:mb-0">
+              <p className="text-muted-foreground text-sm">{getGreeting()}</p>
+              <h1 className="text-2xl lg:text-3xl font-display font-bold text-foreground">
+                {user?.name?.split(' ')[0]} 👋
+              </h1>
+            </div>
+            <div className="lg:w-96">
+              <SearchFilter filters={filters} onFilterChange={setFilters} />
+            </div>
           </div>
-          <SearchFilter filters={filters} onFilterChange={setFilters} />
         </div>
       </header>
 
-      <main className="px-4 py-6 max-w-lg mx-auto">
+      <main className="px-4 py-6 max-w-7xl mx-auto">
         {/* Category Tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-4 -mx-4 px-4 lg:mx-0 lg:px-0 scrollbar-hide lg:justify-center">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isActive = activeCategory === cat.id;
@@ -101,10 +105,10 @@ const Dashboard = () => {
                 key={cat.id}
                 onClick={() => handleCategoryChange(cat.id)}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200",
+                  "flex items-center gap-2 px-4 py-2.5 lg:px-6 lg:py-3 rounded-xl font-medium text-sm whitespace-nowrap transition-all duration-200",
                   isActive
                     ? "bg-primary text-primary-foreground shadow-medium"
-                    : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                    : "bg-card text-muted-foreground hover:bg-muted border border-border hover:border-primary/30"
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -115,7 +119,7 @@ const Dashboard = () => {
         </div>
 
         {/* Results Count */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 lg:mb-6">
           <p className="text-muted-foreground text-sm">
             <span className="font-semibold text-foreground">{filteredItems.length}</span> items found
           </p>
@@ -124,7 +128,7 @@ const Dashboard = () => {
 
         {/* Food Grid */}
         {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
             {filteredItems.map((item, index) => (
               <FoodCard key={item.id} item={item} index={index} />
             ))}
@@ -142,7 +146,10 @@ const Dashboard = () => {
         )}
       </main>
 
-      <BottomNav />
+      {/* Bottom Nav - hidden on desktop */}
+      <div className="lg:hidden">
+        <BottomNav />
+      </div>
     </div>
   );
 };

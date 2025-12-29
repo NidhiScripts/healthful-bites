@@ -4,6 +4,7 @@ import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { BottomNav } from '@/components/BottomNav';
 import { toast } from '@/hooks/use-toast';
+import { formatPrice } from '@/data/foodData';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -19,10 +20,10 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50">
-        <div className="px-4 py-4 max-w-lg mx-auto flex items-center gap-4">
+        <div className="px-4 py-4 max-w-4xl mx-auto flex items-center gap-4">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border"
@@ -30,17 +31,17 @@ const Cart = () => {
             <ArrowLeft className="w-5 h-5 text-foreground" />
           </button>
           <div>
-            <h1 className="text-xl font-display font-bold text-foreground">Your Cart</h1>
+            <h1 className="text-xl lg:text-2xl font-display font-bold text-foreground">Your Cart</h1>
             <p className="text-muted-foreground text-sm">{items.length} items</p>
           </div>
         </div>
       </header>
 
-      <main className="px-4 py-6 max-w-lg mx-auto">
+      <main className="px-4 py-6 max-w-4xl mx-auto">
         {items.length > 0 ? (
-          <>
+          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
             {/* Cart Items */}
-            <div className="space-y-3 mb-6">
+            <div className="lg:col-span-2 space-y-3 mb-6 lg:mb-0">
               {items.map((item, index) => (
                 <div
                   key={item.id}
@@ -50,7 +51,7 @@ const Cart = () => {
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-20 h-20 rounded-xl object-cover"
+                    className="w-20 h-20 lg:w-24 lg:h-24 rounded-xl object-cover"
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
@@ -62,7 +63,7 @@ const Cart = () => {
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                    <p className="text-primary font-bold mt-1">${item.price.toFixed(2)}</p>
+                    <p className="text-primary font-bold mt-1">{formatPrice(item.price)}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Button
                         variant="outline"
@@ -88,46 +89,48 @@ const Cart = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-card rounded-2xl p-5 border border-border mb-4">
-              <h3 className="font-display font-bold text-foreground mb-4">Order Summary</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span className="text-foreground">${totalPrice.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Delivery</span>
-                  <span className="text-primary font-medium">Free</span>
-                </div>
-                <div className="border-t border-border pt-2 mt-2">
-                  <div className="flex justify-between text-lg font-bold">
-                    <span className="text-foreground">Total</span>
-                    <span className="text-foreground">${totalPrice.toFixed(2)}</span>
+            <div className="lg:col-span-1">
+              <div className="bg-card rounded-2xl p-5 border border-border mb-4 lg:sticky lg:top-24">
+                <h3 className="font-display font-bold text-foreground mb-4">Order Summary</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="text-foreground">{formatPrice(totalPrice)}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Delivery</span>
+                    <span className="text-primary font-medium">Free</span>
+                  </div>
+                  <div className="border-t border-border pt-2 mt-2">
+                    <div className="flex justify-between text-lg font-bold">
+                      <span className="text-foreground">Total</span>
+                      <span className="text-foreground">{formatPrice(totalPrice)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="space-y-3 mt-6">
+                  <Button
+                    variant="gradient"
+                    size="xl"
+                    className="w-full"
+                    onClick={handlePlaceOrder}
+                  >
+                    Place Order
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                    onClick={clearCart}
+                  >
+                    Clear Cart
+                  </Button>
                 </div>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="space-y-3">
-              <Button
-                variant="gradient"
-                size="xl"
-                className="w-full"
-                onClick={handlePlaceOrder}
-              >
-                Place Order
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full"
-                onClick={clearCart}
-              >
-                Clear Cart
-              </Button>
-            </div>
-          </>
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
@@ -150,7 +153,10 @@ const Cart = () => {
         )}
       </main>
 
-      <BottomNav />
+      {/* Bottom Nav - hidden on desktop */}
+      <div className="lg:hidden">
+        <BottomNav />
+      </div>
     </div>
   );
 };

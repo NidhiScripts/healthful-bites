@@ -7,6 +7,7 @@ import { BottomNav } from '@/components/BottomNav';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, LineChart, Line, Tooltip } from 'recharts';
 import { format, subDays, parseISO, isWithinInterval } from 'date-fns';
 import { useMemo } from 'react';
+import { formatPrice } from '@/data/foodData';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -69,10 +70,10 @@ const Profile = () => {
   }, [orders]);
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50">
-        <div className="px-4 py-4 max-w-lg mx-auto flex items-center justify-between">
+        <div className="px-4 py-4 max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(-1)}
@@ -80,7 +81,7 @@ const Profile = () => {
             >
               <ArrowLeft className="w-5 h-5 text-foreground" />
             </button>
-            <h1 className="text-xl font-display font-bold text-foreground">Profile</h1>
+            <h1 className="text-xl lg:text-2xl font-display font-bold text-foreground">Profile</h1>
           </div>
           <Button variant="ghost" size="icon" onClick={handleLogout}>
             <LogOut className="w-5 h-5" />
@@ -88,44 +89,51 @@ const Profile = () => {
         </div>
       </header>
 
-      <main className="px-4 py-6 max-w-lg mx-auto">
-        {/* User Info */}
-        <div className="bg-card rounded-2xl p-6 border border-border mb-6 animate-slide-up">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl font-bold text-primary-foreground">
-              {user?.name?.charAt(0).toUpperCase()}
+      <main className="px-4 py-6 max-w-4xl mx-auto">
+        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+          {/* Left Column */}
+          <div className="lg:col-span-1">
+            {/* User Info */}
+            <div className="bg-card rounded-2xl p-6 border border-border mb-6 animate-slide-up">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl lg:text-3xl font-bold text-primary-foreground">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h2 className="text-xl lg:text-2xl font-display font-bold text-foreground">{user?.name}</h2>
+                  <p className="text-muted-foreground">{user?.email}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-display font-bold text-foreground">{user?.name}</h2>
-              <p className="text-muted-foreground">{user?.email}</p>
-            </div>
-          </div>
-        </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '50ms' }}>
-            <Package className="w-6 h-6 mx-auto mb-2 text-primary" />
-            <p className="text-2xl font-bold text-foreground">{totalOrders}</p>
-            <p className="text-xs text-muted-foreground">Orders</p>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '50ms' }}>
+                <Package className="w-6 h-6 mx-auto mb-2 text-primary" />
+                <p className="text-2xl font-bold text-foreground">{totalOrders}</p>
+                <p className="text-xs text-muted-foreground">Orders</p>
+              </div>
+              <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '100ms' }}>
+                <Flame className="w-6 h-6 mx-auto mb-2 text-secondary" />
+                <p className="text-xl font-bold text-foreground">{formatPrice(totalSpent)}</p>
+                <p className="text-xs text-muted-foreground">Spent</p>
+              </div>
+              <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '150ms' }}>
+                <TrendingUp className="w-6 h-6 mx-auto mb-2 text-safe" />
+                <p className="text-2xl font-bold text-foreground">{avgHealthScore}</p>
+                <p className="text-xs text-muted-foreground">Avg Score</p>
+              </div>
+            </div>
           </div>
-          <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '100ms' }}>
-            <Flame className="w-6 h-6 mx-auto mb-2 text-secondary" />
-            <p className="text-2xl font-bold text-foreground">${totalSpent.toFixed(0)}</p>
-            <p className="text-xs text-muted-foreground">Spent</p>
-          </div>
-          <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '150ms' }}>
-            <TrendingUp className="w-6 h-6 mx-auto mb-2 text-safe" />
-            <p className="text-2xl font-bold text-foreground">{avgHealthScore}</p>
-            <p className="text-xs text-muted-foreground">Avg Score</p>
-          </div>
-        </div>
+
+          {/* Right Column */}
+          <div className="lg:col-span-2">
 
         {/* Weekly Calories Chart */}
         {orders.length > 0 && (
           <div className="bg-card rounded-2xl p-5 border border-border mb-6 animate-slide-up" style={{ animationDelay: '200ms' }}>
             <h3 className="font-display font-bold text-foreground mb-4">Weekly Calories</h3>
-            <div className="h-40">
+            <div className="h-40 lg:h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={weeklyData}>
                   <XAxis 
@@ -155,7 +163,7 @@ const Profile = () => {
         {orders.length > 0 && (
           <div className="bg-card rounded-2xl p-5 border border-border mb-6 animate-slide-up" style={{ animationDelay: '250ms' }}>
             <h3 className="font-display font-bold text-foreground mb-4">Health Score Trend</h3>
-            <div className="h-32">
+            <div className="h-32 lg:h-40">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={weeklyData}>
                   <XAxis 
@@ -200,7 +208,7 @@ const Profile = () => {
                     <span className="text-sm text-muted-foreground">
                       {format(parseISO(order.date), 'MMM d, yyyy • h:mm a')}
                     </span>
-                    <span className="font-bold text-foreground">${order.total.toFixed(2)}</span>
+                    <span className="font-bold text-foreground">{formatPrice(order.total)}</span>
                   </div>
                   <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     {order.items.map((item) => (
@@ -232,9 +240,14 @@ const Profile = () => {
             </div>
           )}
         </div>
+          </div>
+        </div>
       </main>
 
-      <BottomNav />
+      {/* Bottom Nav - hidden on desktop */}
+      <div className="lg:hidden">
+        <BottomNav />
+      </div>
     </div>
   );
 };

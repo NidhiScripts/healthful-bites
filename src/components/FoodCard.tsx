@@ -1,5 +1,5 @@
 import { Plus, Star } from 'lucide-react';
-import { FoodItem } from '@/data/foodData';
+import { FoodItem, formatPrice } from '@/data/foodData';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -36,14 +36,14 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
   return (
     <article
       onClick={() => navigate(`/food/${item.id}`)}
-      className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-strong transition-all duration-300 cursor-pointer animate-slide-up border border-border/50 hover:border-primary/20"
+      className="group bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-strong transition-all duration-300 cursor-pointer animate-slide-up border border-border/50 hover:border-primary/30 hover:scale-[1.02]"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       <div className="relative overflow-hidden">
         <img
           src={item.image}
           alt={item.name}
-          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-40 lg:h-48 object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
@@ -69,20 +69,20 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 lg:p-5">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-display font-bold text-foreground line-clamp-1 group-hover:text-primary transition-colors">
+          <h3 className="font-display font-bold text-foreground line-clamp-1 group-hover:text-primary transition-colors text-base lg:text-lg">
             {item.name}
           </h3>
         </div>
         
-        <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
+        <p className="text-muted-foreground text-sm line-clamp-2 mb-3 lg:mb-4">
           {item.description}
         </p>
 
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-foreground">${item.price.toFixed(2)}</span>
+            <span className="text-lg lg:text-xl font-bold text-foreground">{formatPrice(item.price)}</span>
             <span className={cn("health-badge text-[10px]", getHealthBadgeClass(item.healthStatus))}>
               {item.healthStatus === 'safe' ? 'Safe' : 
                item.healthStatus === 'moderate' ? 'Moderate' : 'High Risk'}
