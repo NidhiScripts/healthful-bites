@@ -15,6 +15,7 @@ export interface FoodItem {
   healthStatus: 'safe' | 'moderate' | 'high-risk';
   badges: string[];
   healthNote: string;
+  ingredients: string[];
 }
 
 export const foodItems: FoodItem[] = [
@@ -29,7 +30,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 9,
     healthStatus: 'safe',
     badges: ['High Protein', 'Low Fat'],
-    healthNote: 'Excellent source of probiotics and protein. Great for gut health and muscle recovery.'
+    healthNote: 'Excellent source of probiotics and protein. Great for gut health and muscle recovery.',
+    ingredients: ['Greek Yogurt', 'Fresh Strawberries', 'Blueberries', 'Honey', 'Granola', 'Chia Seeds']
   },
   {
     id: '2',
@@ -42,7 +44,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 8,
     healthStatus: 'safe',
     badges: ['Low Sugar', 'Heart Healthy'],
-    healthNote: 'Rich in healthy fats and fiber. Supports heart health and provides sustained energy.'
+    healthNote: 'Rich in healthy fats and fiber. Supports heart health and provides sustained energy.',
+    ingredients: ['Whole Grain Bread', 'Ripe Avocado', 'Poached Eggs', 'Cherry Tomatoes', 'Red Pepper Flakes', 'Olive Oil', 'Sea Salt']
   },
   {
     id: '3',
@@ -55,7 +58,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 9,
     healthStatus: 'safe',
     badges: ['High Protein', 'Keto Friendly'],
-    healthNote: 'Packed with vitamins and minerals. Excellent protein source for muscle maintenance.'
+    healthNote: 'Packed with vitamins and minerals. Excellent protein source for muscle maintenance.',
+    ingredients: ['Farm Fresh Eggs', 'Baby Spinach', 'Roma Tomatoes', 'Feta Cheese', 'Bell Peppers', 'Onions', 'Butter']
   },
   {
     id: '4',
@@ -68,7 +72,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 7,
     healthStatus: 'moderate',
     badges: ['Antioxidant Rich', 'Vegan'],
-    healthNote: 'High in antioxidants but watch sugar content. Natural sugars from fruits.'
+    healthNote: 'High in antioxidants but watch sugar content. Natural sugars from fruits.',
+    ingredients: ['Mixed Berries', 'Banana', 'Almond Milk', 'Chia Seeds', 'Coconut Flakes', 'Hemp Seeds', 'Agave Nectar']
   },
   {
     id: '5',
@@ -81,7 +86,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 9,
     healthStatus: 'safe',
     badges: ['High Protein', 'Diet Friendly'],
-    healthNote: 'Perfect balanced meal. Low carb, high protein option for weight management.'
+    healthNote: 'Perfect balanced meal. Low carb, high protein option for weight management.',
+    ingredients: ['Grilled Chicken Breast', 'Mixed Greens', 'Cherry Tomatoes', 'Cucumber', 'Red Onion', 'Olive Oil Vinaigrette', 'Parmesan Cheese']
   },
   {
     id: '6',
@@ -94,7 +100,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 9,
     healthStatus: 'safe',
     badges: ['Vegan', 'Fiber Rich'],
-    healthNote: 'Complete protein source. Excellent for plant-based nutrition.'
+    healthNote: 'Complete protein source. Excellent for plant-based nutrition.',
+    ingredients: ['Organic Quinoa', 'Roasted Sweet Potato', 'Chickpeas', 'Kale', 'Avocado', 'Tahini Dressing', 'Sesame Seeds']
   },
   {
     id: '7',
@@ -107,7 +114,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 8,
     healthStatus: 'safe',
     badges: ['Omega-3 Rich', 'Brain Food'],
-    healthNote: 'Excellent source of omega-3 fatty acids. Supports brain and heart health.'
+    healthNote: 'Excellent source of omega-3 fatty acids. Supports brain and heart health.',
+    ingredients: ['Fresh Salmon', 'Sushi Rice', 'Edamame', 'Cucumber', 'Avocado', 'Seaweed', 'Sesame Ginger Dressing', 'Pickled Ginger']
   },
   {
     id: '8',
@@ -120,7 +128,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 8,
     healthStatus: 'safe',
     badges: ['High Protein', 'Balanced'],
-    healthNote: 'Lean protein with complex carbs. Great for sustained energy throughout the day.'
+    healthNote: 'Lean protein with complex carbs. Great for sustained energy throughout the day.',
+    ingredients: ['Whole Wheat Tortilla', 'Sliced Turkey Breast', 'Hummus', 'Lettuce', 'Tomato', 'Red Onion', 'Cucumber', 'Feta Cheese']
   },
   {
     id: '9',
@@ -133,7 +142,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 8,
     healthStatus: 'safe',
     badges: ['Low Sugar', 'Heart Healthy'],
-    healthNote: 'Rich in healthy fats and minerals. Great for heart health in moderation.'
+    healthNote: 'Rich in healthy fats and minerals. Great for heart health in moderation.',
+    ingredients: ['Raw Almonds', 'Cashews', 'Walnuts', 'Pecans', 'Sea Salt']
   },
   {
     id: '10',
@@ -146,7 +156,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 9,
     healthStatus: 'safe',
     badges: ['Low Calorie', 'Vegan'],
-    healthNote: 'Fiber-rich and satisfying. Excellent choice for guilt-free snacking.'
+    healthNote: 'Fiber-rich and satisfying. Excellent choice for guilt-free snacking.',
+    ingredients: ['Chickpeas', 'Tahini', 'Lemon Juice', 'Garlic', 'Olive Oil', 'Fresh Carrots', 'Cucumber', 'Bell Peppers']
   },
   {
     id: '11',
@@ -159,7 +170,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 7,
     healthStatus: 'moderate',
     badges: ['Energy Boost', 'No Bake'],
-    healthNote: 'Good pre-workout snack. Contains natural sugars for quick energy.'
+    healthNote: 'Good pre-workout snack. Contains natural sugars for quick energy.',
+    ingredients: ['Rolled Oats', 'Peanut Butter', 'Dark Chocolate Chips', 'Honey', 'Flax Seeds', 'Vanilla Extract']
   },
   {
     id: '12',
@@ -172,7 +184,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 6,
     healthStatus: 'moderate',
     badges: ['Calcium Rich', 'Whole Grain'],
-    healthNote: 'Good calcium source but higher in saturated fat. Enjoy in moderation.'
+    healthNote: 'Good calcium source but higher in saturated fat. Enjoy in moderation.',
+    ingredients: ['Whole Grain Crackers', 'Aged Cheddar Cheese', 'Rosemary', 'Black Pepper']
   },
   {
     id: '13',
@@ -185,7 +198,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 4,
     healthStatus: 'high-risk',
     badges: ['Comfort Food'],
-    healthNote: 'High in sugar and refined carbs. Best as an occasional treat.'
+    healthNote: 'High in sugar and refined carbs. Best as an occasional treat.',
+    ingredients: ['All-Purpose Flour', 'Buttermilk', 'Eggs', 'Butter', 'Maple Syrup', 'Baking Powder', 'Vanilla Extract', 'Whipped Cream']
   },
   {
     id: '14',
@@ -198,7 +212,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 3,
     healthStatus: 'high-risk',
     badges: ['Comfort Food'],
-    healthNote: 'High in saturated fat and calories. Consider healthier alternatives.'
+    healthNote: 'High in saturated fat and calories. Consider healthier alternatives.',
+    ingredients: ['Russet Potatoes', 'Vegetable Oil', 'Sea Salt', 'Rosemary', 'Garlic Powder', 'Paprika']
   },
   {
     id: '15',
@@ -211,7 +226,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 4,
     healthStatus: 'high-risk',
     badges: ['High Protein'],
-    healthNote: 'Very high in saturated fat. Choose grilled or lean options when possible.'
+    healthNote: 'Very high in saturated fat. Choose grilled or lean options when possible.',
+    ingredients: ['Beef Patty', 'Brioche Bun', 'Cheddar Cheese', 'Lettuce', 'Tomato', 'Pickles', 'Onion', 'Special Sauce', 'Ketchup']
   },
   {
     id: '16',
@@ -224,7 +240,8 @@ export const foodItems: FoodItem[] = [
     healthScore: 7,
     healthStatus: 'moderate',
     badges: ['Vitamin Rich', 'Detox'],
-    healthNote: 'High in vitamins but contains natural sugars. Good for occasional detox.'
+    healthNote: 'High in vitamins but contains natural sugars. Good for occasional detox.',
+    ingredients: ['Fresh Kale', 'Green Apple', 'Ginger Root', 'Lemon', 'Celery', 'Cucumber', 'Mint Leaves']
   }
 ];
 
