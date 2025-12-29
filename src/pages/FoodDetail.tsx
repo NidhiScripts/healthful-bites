@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Minus, ShieldCheck, AlertTriangle, AlertCircle, Star } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, ShieldCheck, AlertTriangle, AlertCircle, Star, Leaf } from 'lucide-react';
 import { foodItems, getHealthStatusLabel, formatPrice } from '@/data/foodData';
 import { Button } from '@/components/ui/button';
 import { NutritionChart, NutritionBarChart } from '@/components/NutritionChart';
@@ -134,6 +134,27 @@ const FoodDetail = () => {
                   <h3 className="font-semibold mb-1">{getHealthStatusLabel(item.healthStatus)}</h3>
                   <p className="text-sm opacity-90">{item.healthNote}</p>
                 </div>
+              </div>
+            </div>
+
+            {/* Ingredients */}
+            <div 
+              className="bg-card rounded-2xl p-5 border border-border mb-4 animate-slide-up"
+              style={{ animationDelay: '120ms' }}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Leaf className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-bold text-foreground">Ingredients</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {item.ingredients.map((ingredient, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-muted text-muted-foreground border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-colors"
+                  >
+                    {ingredient}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
