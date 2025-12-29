@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Minus, ShieldCheck, AlertTriangle, AlertCircle, Star } from 'lucide-react';
-import { foodItems, getHealthStatusLabel } from '@/data/foodData';
+import { foodItems, getHealthStatusLabel, formatPrice } from '@/data/foodData';
 import { Button } from '@/components/ui/button';
 import { NutritionChart, NutritionBarChart } from '@/components/NutritionChart';
 import { HealthScoreGauge } from '@/components/HealthScoreGauge';
@@ -59,9 +59,9 @@ const FoodDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
       {/* Hero Image */}
-      <div className="relative h-64 sm:h-80">
+      <div className="relative h-64 sm:h-80 lg:h-96">
         <img
           src={item.image}
           alt={item.name}
@@ -90,73 +90,82 @@ const FoodDetail = () => {
         </div>
       </div>
 
-      <main className="px-4 -mt-8 relative z-10 max-w-lg mx-auto">
-        {/* Title Card */}
-        <div className="bg-card rounded-2xl p-5 shadow-medium border border-border mb-4 animate-slide-up">
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <div>
-              <h1 className="text-2xl font-display font-bold text-foreground mb-1">
-                {item.name}
-              </h1>
-              <p className="text-muted-foreground">{item.description}</p>
+      <main className="px-4 -mt-8 relative z-10 max-w-4xl mx-auto">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+          {/* Left Column */}
+          <div>
+            {/* Title Card */}
+            <div className="bg-card rounded-2xl p-5 lg:p-6 shadow-medium border border-border mb-4 animate-slide-up">
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
+                  <h1 className="text-2xl lg:text-3xl font-display font-bold text-foreground mb-1">
+                    {item.name}
+                  </h1>
+                  <p className="text-muted-foreground">{item.description}</p>
+                </div>
+                <span className="text-2xl lg:text-3xl font-bold text-primary whitespace-nowrap">
+                  {formatPrice(item.price)}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {item.badges.map((badge) => (
+                  <span
+                    key={badge}
+                    className="health-badge health-badge-safe"
+                  >
+                    {badge}
+                  </span>
+                ))}
+              </div>
             </div>
-            <span className="text-2xl font-bold text-primary whitespace-nowrap">
-              ${item.price.toFixed(2)}
-            </span>
-          </div>
 
-          <div className="flex flex-wrap gap-2">
-            {item.badges.map((badge) => (
-              <span
-                key={badge}
-                className="health-badge health-badge-safe"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Health Alert */}
-        <div 
-          className={cn(
-            "rounded-2xl p-4 border mb-4 animate-slide-up",
-            getHealthAlertClass()
-          )}
-          style={{ animationDelay: '100ms' }}
-        >
-          <div className="flex items-start gap-3">
-            {getHealthIcon()}
-            <div>
-              <h3 className="font-semibold mb-1">{getHealthStatusLabel(item.healthStatus)}</h3>
-              <p className="text-sm opacity-90">{item.healthNote}</p>
+            {/* Health Alert */}
+            <div 
+              className={cn(
+                "rounded-2xl p-4 border mb-4 animate-slide-up",
+                getHealthAlertClass()
+              )}
+              style={{ animationDelay: '100ms' }}
+            >
+              <div className="flex items-start gap-3">
+                {getHealthIcon()}
+                <div>
+                  <h3 className="font-semibold mb-1">{getHealthStatusLabel(item.healthStatus)}</h3>
+                  <p className="text-sm opacity-90">{item.healthNote}</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Health Score Gauge */}
-        <div 
-          className="bg-card rounded-2xl p-5 border border-border mb-4 animate-slide-up"
-          style={{ animationDelay: '150ms' }}
-        >
-          <h3 className="font-display font-bold text-foreground mb-4">Health Rating</h3>
-          <div className="flex items-center justify-center">
-            <HealthScoreGauge score={item.healthScore} size="lg" />
+          {/* Right Column */}
+          <div>
+
+            {/* Health Score Gauge */}
+            <div 
+              className="bg-card rounded-2xl p-5 border border-border mb-4 animate-slide-up"
+              style={{ animationDelay: '150ms' }}
+            >
+              <h3 className="font-display font-bold text-foreground mb-4">Health Rating</h3>
+              <div className="flex items-center justify-center">
+                <HealthScoreGauge score={item.healthScore} size="lg" />
+              </div>
+            </div>
+
+            {/* Nutrition Charts */}
+            <div 
+              className="space-y-4 animate-slide-up"
+              style={{ animationDelay: '200ms' }}
+            >
+              <NutritionChart {...item.nutrition} />
+              <NutritionBarChart {...item.nutrition} />
+            </div>
           </div>
-        </div>
-
-        {/* Nutrition Charts */}
-        <div 
-          className="space-y-4 animate-slide-up"
-          style={{ animationDelay: '200ms' }}
-        >
-          <NutritionChart {...item.nutrition} />
-          <NutritionBarChart {...item.nutrition} />
         </div>
 
         {/* Add to Cart Section */}
         <div 
-          className="mt-6 bg-card rounded-2xl p-5 border border-border animate-slide-up"
+          className="mt-6 bg-card rounded-2xl p-5 border border-border animate-slide-up lg:max-w-md lg:mx-auto"
           style={{ animationDelay: '250ms' }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -188,12 +197,15 @@ const FoodDetail = () => {
             className="w-full"
             onClick={handleAddToCart}
           >
-            Add to Cart • ${(item.price * quantity).toFixed(2)}
+            Add to Cart • {formatPrice(item.price * quantity)}
           </Button>
         </div>
       </main>
 
-      <BottomNav />
+      {/* Bottom Nav - hidden on desktop */}
+      <div className="lg:hidden">
+        <BottomNav />
+      </div>
     </div>
   );
 };
