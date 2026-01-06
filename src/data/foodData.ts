@@ -1,3 +1,21 @@
+import masalaDosaImg from "@/assets/foods/masala-dosa.jpg";
+import idliSambarImg from "@/assets/foods/idli-sambar.jpg";
+import pohaImg from "@/assets/foods/poha.jpg";
+import upmaImg from "@/assets/foods/upma.jpg";
+import meduVadaImg from "@/assets/foods/medu-vada.jpg";
+import palakPaneerImg from "@/assets/foods/palak-paneer.jpg";
+import rajmaChawalImg from "@/assets/foods/rajma-chawal.jpg";
+import kadhaiPaneerImg from "@/assets/foods/kadhai-paneer.jpg";
+import choleBhatureImg from "@/assets/foods/chole-bhature.jpg";
+import dhoklaImg from "@/assets/foods/dhokla.jpg";
+import bhelPuriImg from "@/assets/foods/bhel-puri.jpg";
+import paniPuriImg from "@/assets/foods/pani-puri.jpg";
+import alooTikkiImg from "@/assets/foods/aloo-tikki.jpg";
+import dahiPuriImg from "@/assets/foods/dahi-puri.jpg";
+import springRollsImg from "@/assets/foods/spring-rolls.jpg";
+import kachoriImg from "@/assets/foods/kachori.jpg";
+import vadaPavImg from "@/assets/foods/vada-pav.jpg";
+
 export interface FoodItem {
   id: string;
   name: string;
@@ -25,7 +43,7 @@ export const foodItems: FoodItem[] = [
     name: 'Masala Dosa',
     description: 'Crispy rice crepe filled with spiced potato masala',
     price: 149,
-    image: 'https://images.unsplash.com/photo-1630383249896-424e482df921?w=400&h=300&fit=crop',
+    image: masalaDosaImg,
     category: 'breakfast',
     nutrition: { calories: 350, sugar: 4, fat: 12, protein: 8 },
     healthScore: 7,
@@ -39,7 +57,7 @@ export const foodItems: FoodItem[] = [
     name: 'Idli Sambhar',
     description: 'Steamed rice cakes with lentil vegetable stew',
     price: 129,
-    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&h=300&fit=crop',
+    image: idliSambarImg,
     category: 'breakfast',
     nutrition: { calories: 180, sugar: 4, fat: 2, protein: 8 },
     healthScore: 9,
@@ -53,7 +71,7 @@ export const foodItems: FoodItem[] = [
     name: 'Poha',
     description: 'Flattened rice tempered with peanuts and spices',
     price: 89,
-    image: 'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?w=400&h=300&fit=crop',
+    image: pohaImg,
     category: 'breakfast',
     nutrition: { calories: 250, sugar: 2, fat: 8, protein: 6 },
     healthScore: 7,
@@ -67,7 +85,7 @@ export const foodItems: FoodItem[] = [
     name: 'Upma',
     description: 'Savory semolina porridge with vegetables',
     price: 99,
-    image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=400&h=300&fit=crop',
+    image: upmaImg,
     category: 'breakfast',
     nutrition: { calories: 220, sugar: 2, fat: 6, protein: 6 },
     healthScore: 7,
@@ -95,7 +113,7 @@ export const foodItems: FoodItem[] = [
     name: 'Medu Vada',
     description: 'Crispy lentil doughnuts served with chutney',
     price: 99,
-    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&h=300&fit=crop',
+    image: meduVadaImg,
     category: 'breakfast',
     nutrition: { calories: 280, sugar: 2, fat: 16, protein: 10 },
     healthScore: 5,
@@ -138,7 +156,7 @@ export const foodItems: FoodItem[] = [
     name: 'Chole Bhature',
     description: 'Spiced chickpea curry with fluffy fried bread',
     price: 199,
-    image: 'https://images.unsplash.com/photo-1626132647523-66c3bf6da5fc?w=400&h=300&fit=crop',
+    image: choleBhatureImg,
     category: 'lunch',
     nutrition: { calories: 580, sugar: 8, fat: 28, protein: 18 },
     healthScore: 4,
@@ -152,7 +170,7 @@ export const foodItems: FoodItem[] = [
     name: 'Palak Paneer',
     description: 'Cottage cheese cubes in creamy spinach gravy',
     price: 259,
-    image: 'https://images.unsplash.com/photo-1618449840665-9ed506d73a34?w=400&h=300&fit=crop',
+    image: palakPaneerImg,
     category: 'lunch',
     nutrition: { calories: 320, sugar: 4, fat: 22, protein: 18 },
     healthScore: 8,
@@ -180,7 +198,7 @@ export const foodItems: FoodItem[] = [
     name: 'Rajma Chawal',
     description: 'Kidney bean curry served with steamed rice',
     price: 189,
-    image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop',
+    image: rajmaChawalImg,
     category: 'lunch',
     nutrition: { calories: 420, sugar: 4, fat: 10, protein: 16 },
     healthScore: 8,
@@ -194,7 +212,7 @@ export const foodItems: FoodItem[] = [
     name: 'Kadhai Paneer',
     description: 'Cottage cheese cooked with bell peppers and spices',
     price: 269,
-    image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400&h=300&fit=crop',
+    image: kadhaiPaneerImg,
     category: 'lunch',
     nutrition: { calories: 340, sugar: 5, fat: 24, protein: 16 },
     healthScore: 7,
@@ -265,7 +283,7 @@ export const foodItems: FoodItem[] = [
     name: 'Vada Pav',
     description: 'Mumbai street food - spiced potato fritter in bread',
     price: 59,
-    image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&h=300&fit=crop',
+    image: vadaPavImg,
     category: 'snacks',
     nutrition: { calories: 340, sugar: 4, fat: 18, protein: 6 },
     healthScore: 4,
@@ -279,7 +297,7 @@ export const foodItems: FoodItem[] = [
     name: 'Pani Puri',
     description: 'Crispy puris filled with tangy spiced water',
     price: 69,
-    image: 'https://images.unsplash.com/photo-1625398407796-82650a8c135f?w=400&h=300&fit=crop',
+    image: paniPuriImg,
     category: 'snacks',
     nutrition: { calories: 180, sugar: 6, fat: 8, protein: 4 },
     healthScore: 5,
@@ -293,7 +311,7 @@ export const foodItems: FoodItem[] = [
     name: 'Aloo Tikki',
     description: 'Crispy spiced potato patties with chutneys',
     price: 89,
-    image: 'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=400&h=300&fit=crop',
+    image: alooTikkiImg,
     category: 'snacks',
     nutrition: { calories: 220, sugar: 3, fat: 12, protein: 4 },
     healthScore: 5,
@@ -307,7 +325,7 @@ export const foodItems: FoodItem[] = [
     name: 'Bhel Puri',
     description: 'Puffed rice mixed with veggies and tangy chutneys',
     price: 79,
-    image: 'https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?w=400&h=300&fit=crop',
+    image: bhelPuriImg,
     category: 'snacks',
     nutrition: { calories: 160, sugar: 8, fat: 4, protein: 4 },
     healthScore: 6,
@@ -321,7 +339,7 @@ export const foodItems: FoodItem[] = [
     name: 'Dhokla',
     description: 'Steamed savory gram flour cake from Gujarat',
     price: 99,
-    image: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=400&h=300&fit=crop',
+    image: dhoklaImg,
     category: 'snacks',
     nutrition: { calories: 140, sugar: 4, fat: 4, protein: 6 },
     healthScore: 8,
@@ -335,7 +353,7 @@ export const foodItems: FoodItem[] = [
     name: 'Spring Rolls',
     description: 'Crispy rolls filled with mixed vegetables',
     price: 149,
-    image: 'https://images.unsplash.com/photo-1548507200-e5de8dd23b51?w=400&h=300&fit=crop',
+    image: springRollsImg,
     category: 'snacks',
     nutrition: { calories: 280, sugar: 4, fat: 16, protein: 6 },
     healthScore: 5,
@@ -377,7 +395,7 @@ export const foodItems: FoodItem[] = [
     name: 'Kachori',
     description: 'Crispy fried pastry filled with spiced lentils',
     price: 59,
-    image: 'https://images.unsplash.com/photo-1626132647523-66c3bf6da5fc?w=400&h=300&fit=crop',
+    image: kachoriImg,
     category: 'snacks',
     nutrition: { calories: 290, sugar: 3, fat: 18, protein: 6 },
     healthScore: 4,
@@ -391,7 +409,7 @@ export const foodItems: FoodItem[] = [
     name: 'Dahi Puri',
     description: 'Crispy puris topped with yogurt and chutneys',
     price: 79,
-    image: 'https://images.unsplash.com/photo-1609339800641-a51737953a87?w=400&h=300&fit=crop',
+    image: dahiPuriImg,
     category: 'snacks',
     nutrition: { calories: 200, sugar: 10, fat: 8, protein: 6 },
     healthScore: 6,
