@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import FoodDetail from "./pages/FoodDetail";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
+import OrderTracking from "./pages/OrderTracking";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const AppRoutes = () => (
     <Route path="/food/:id" element={<ProtectedRoute><FoodDetail /></ProtectedRoute>} />
     <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+    <Route path="/order/:orderId" element={<ProtectedRoute><OrderTracking /></ProtectedRoute>} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

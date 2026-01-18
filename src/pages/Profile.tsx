@@ -8,6 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, LineChart, Line
 import { format, subDays, parseISO, isWithinInterval } from 'date-fns';
 import { useMemo } from 'react';
 import { formatPrice } from '@/data/foodData';
+import { cn } from '@/lib/utils';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -200,14 +201,27 @@ const Profile = () => {
           {orders.length > 0 ? (
             <div className="space-y-3">
               {orders.slice().reverse().map((order, index) => (
-                <div
+                <button
                   key={order.id}
-                  className="bg-card rounded-2xl p-4 border border-border"
+                  onClick={() => navigate(`/order/${order.id}`)}
+                  className="w-full bg-card rounded-2xl p-4 border border-border text-left hover:border-primary/50 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-muted-foreground">
-                      {format(parseISO(order.date), 'MMM d, yyyy • h:mm a')}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">
+                        {format(parseISO(order.date), 'MMM d, yyyy • h:mm a')}
+                      </span>
+                      <span className={cn(
+                        "text-xs px-2 py-0.5 rounded-full font-medium",
+                        order.status === 'delivered' ? "bg-safe/20 text-safe" :
+                        order.status === 'out_for_delivery' ? "bg-primary/20 text-primary" :
+                        order.status === 'preparing' ? "bg-secondary/20 text-secondary" :
+                        "bg-muted text-muted-foreground"
+                      )}>
+                        {order.status === 'out_for_delivery' ? 'On the way' : 
+                         order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      </span>
+                    </div>
                     <span className="font-bold text-foreground">{formatPrice(order.total)}</span>
                   </div>
                   <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
@@ -224,7 +238,7 @@ const Profile = () => {
                   <p className="text-sm text-muted-foreground mt-2">
                     {order.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}
                   </p>
-                </div>
+                </button>
               ))}
             </div>
           ) : (
