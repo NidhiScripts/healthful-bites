@@ -1,5 +1,5 @@
 import masalaDosaImg from "@/assets/foods/masala-dosa.jpg";
-import idliSambarImg from "@/assets/foods/idli-sambar.jpg";
+import idliImg from "@/assets/foods/idli.jpg";
 import pohaImg from "@/assets/foods/poha.jpg";
 import upmaImg from "@/assets/foods/upma.jpg";
 import meduVadaImg from "@/assets/foods/medu-vada.jpg";
@@ -8,12 +8,13 @@ import rajmaChawalImg from "@/assets/foods/rajma-chawal.jpg";
 import kadhaiPaneerImg from "@/assets/foods/kadhai-paneer.jpg";
 import choleBhatureImg from "@/assets/foods/chole-bhature.jpg";
 import dhoklaImg from "@/assets/foods/dhokla.jpg";
-import bhelPuriImg from "@/assets/foods/bhel-puri.jpg";
-import paniPuriImg from "@/assets/foods/pani-puri.jpg";
-import alooTikkiImg from "@/assets/foods/aloo-tikki.jpg";
-import dahiPuriImg from "@/assets/foods/dahi-puri.jpg";
+import dalTadkaImg from "@/assets/foods/dal-tadka.jpg";
+import bhelPuriImg from "@/assets/foods/bhel-puri_user.jpg";
+import paniPuriImg from "@/assets/foods/pani-puri_user.jpg";
+import alooTikkiImg from "@/assets/foods/aloo-tikki_user.jpg";
+import dahiPuriImg from "@/assets/foods/dahi-puri_user.jpg";
 import springRollsImg from "@/assets/foods/spring-rolls.jpg";
-import kachoriImg from "@/assets/foods/kachori.jpg";
+import kachoriImg from "@/assets/foods/kachori_user.jpg";
 import vadaPavImg from "@/assets/foods/vada-pav.jpg";
 
 export interface FoodItem {
@@ -57,7 +58,7 @@ export const foodItems: FoodItem[] = [
     name: 'Idli Sambhar',
     description: 'Steamed rice cakes with lentil vegetable stew',
     price: 129,
-    image: idliSambarImg,
+    image: idliImg,
     category: 'breakfast',
     nutrition: { calories: 180, sugar: 4, fat: 2, protein: 8 },
     healthScore: 9,
@@ -142,7 +143,7 @@ export const foodItems: FoodItem[] = [
     name: 'Dal Tadka',
     description: 'Yellow lentils tempered with aromatic spices',
     price: 179,
-    image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&h=300&fit=crop',
+    image: dalTadkaImg,
     category: 'lunch',
     nutrition: { calories: 220, sugar: 3, fat: 8, protein: 14 },
     healthScore: 9,
