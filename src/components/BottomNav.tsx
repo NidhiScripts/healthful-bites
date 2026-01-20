@@ -1,12 +1,10 @@
-import { Cookie, Sunrise, UtensilsCrossed, User, ShoppingCart } from 'lucide-react';
+import { BarChart3, User, ShoppingCart } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { icon: Cookie, label: 'Snacks', path: '/dashboard', category: 'snacks' },
-  { icon: Sunrise, label: 'Breakfast', path: '/dashboard', category: 'breakfast' },
-  { icon: UtensilsCrossed, label: 'Lunch', path: '/dashboard', category: 'lunch' },
+  { icon: BarChart3, label: 'Compare', path: '/comparison' },
   { icon: ShoppingCart, label: 'Cart', path: '/cart' },
   { icon: User, label: 'Profile', path: '/profile' },
 ];
@@ -15,21 +13,12 @@ export const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { totalItems } = useCart();
-  const searchParams = new URLSearchParams(location.search);
-  const currentCategory = searchParams.get('category');
 
   const handleNavClick = (item: typeof navItems[0]) => {
-    if (item.category) {
-      navigate(`${item.path}?category=${item.category}`);
-    } else {
-      navigate(item.path);
-    }
+    navigate(item.path);
   };
 
   const isActive = (item: typeof navItems[0]) => {
-    if (item.category) {
-      return location.pathname === '/dashboard' && currentCategory === item.category;
-    }
     return location.pathname === item.path;
   };
 

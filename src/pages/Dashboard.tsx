@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { foodItems, FoodItem } from '@/data/foodData';
 import { FoodCard } from '@/components/FoodCard';
 import { SearchFilter } from '@/components/SearchFilter';
 import { BottomNav } from '@/components/BottomNav';
-import { Cookie, Sunrise, UtensilsCrossed, TrendingUp } from 'lucide-react';
+import { Cookie, Sunrise, UtensilsCrossed, TrendingUp, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface FilterValues {
   search: string;
@@ -26,6 +27,7 @@ const categories = [
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category') || 'all';
   
@@ -87,8 +89,18 @@ const Dashboard = () => {
                 {user?.name?.split(' ')[0]} 👋
               </h1>
             </div>
-            <div className="lg:w-96">
-              <SearchFilter filters={filters} onFilterChange={setFilters} />
+            <div className="flex items-center gap-4">
+              <Button
+                variant="outline"
+                onClick={() => navigate('/comparison')}
+                className="hidden lg:flex items-center gap-2"
+              >
+                <BarChart3 className="w-4 h-4" />
+                Compare Brands
+              </Button>
+              <div className="lg:w-96">
+                <SearchFilter filters={filters} onFilterChange={setFilters} />
+              </div>
             </div>
           </div>
         </div>

@@ -6,11 +6,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import FoodDetail from "./pages/FoodDetail";
+import TestPage from "./pages/TestPage";
+import BrandComparisonSimple from "./pages/BrandComparisonSimple";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
-import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +24,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/comparison" replace />;
   }
   return <>{children}</>;
 };
@@ -33,11 +32,11 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<PublicRoute><Auth /></PublicRoute>} />
-    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-    <Route path="/food/:id" element={<ProtectedRoute><FoodDetail /></ProtectedRoute>} />
+    <Route path="/test" element={<ProtectedRoute><TestPage /></ProtectedRoute>} />
+    <Route path="/comparison" element={<ProtectedRoute><BrandComparisonSimple /></ProtectedRoute>} />
     <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-    <Route path="*" element={<NotFound />} />
+    <Route path="*" element={<Navigate to="/test" replace />} />
   </Routes>
 );
 
