@@ -10,6 +10,7 @@ import TestPage from "./pages/TestPage";
 import BrandComparisonSimple from "./pages/BrandComparisonSimple";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +37,7 @@ const AppRoutes = () => (
     <Route path="/comparison" element={<ProtectedRoute><BrandComparisonSimple /></ProtectedRoute>} />
     <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-    <Route path="*" element={<Navigate to="/test" replace />} />
+    <Route path="*" element={<NotFound />} />
   </Routes>
 );
 

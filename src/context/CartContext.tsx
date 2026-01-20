@@ -2,16 +2,22 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { FoodItem } from '@/data/foodData';
 import { useAuth } from './AuthContext';
 
-interface CartItem extends FoodItem {
+export interface CartItem extends FoodItem {
   quantity: number;
 }
 
-interface Order {
+export type OrderStatus = 'confirmed' | 'preparing' | 'out_for_delivery' | 'delivered';
+
+export interface Order {
   id: string;
   userId: string;
   items: CartItem[];
   total: number;
   date: string;
+  status: OrderStatus;
+  paymentMethod: 'cod' | 'upi' | 'card';
+  deliveryAddress: string;
+  estimatedDelivery: string;
 }
 
 interface CartContextType {
@@ -21,7 +27,8 @@ interface CartContextType {
   removeFromCart: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
-  placeOrder: () => void;
+  placeOrder: (paymentMethod: 'cod' | 'upi' | 'card', deliveryAddress: string) => Order | null;
+  updateOrderStatus: (orderId: string, status: OrderStatus) => void;
   totalItems: number;
   totalPrice: number;
 }
@@ -75,21 +82,62 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setItems([]);
   };
 
-  const placeOrder = () => {
-    if (!user || items.length === 0) return;
+  const placeOrder = (paymentMethod: 'cod' | 'upi' | 'card', deliveryAddress: string): Order | null => {
+    if (!user || items.length === 0) return null;
+
+    const estimatedMinutes = 30 + Math.floor(Math.random() * 15);
+    const estimatedDelivery = new Date(Date.now() + estimatedMinutes * 60 * 1000).toISOString();
 
     const newOrder: Order = {
       id: `order_${Date.now()}`,
       userId: user.id,
       items: [...items],
       total: totalPrice,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      status: 'confirmed',
+      paymentMethod,
+      deliveryAddress,
+      estimatedDelivery
     };
 
     const updatedOrders = [...orders, newOrder];
     setOrders(updatedOrders);
     localStorage.setItem(`healthfood_orders_${user.id}`, JSON.stringify(updatedOrders));
     clearCart();
+
+    // Simulate order status progression
+    simulateOrderProgress(newOrder.id);
+
+    return newOrder;
+  };
+
+  const simulateOrderProgress = (orderId: string) => {
+    // Preparing after 5 seconds
+    setTimeout(() => {
+      updateOrderStatus(orderId, 'preparing');
+    }, 5000);
+
+    // Out for delivery after 15 seconds
+    setTimeout(() => {
+      updateOrderStatus(orderId, 'out_for_delivery');
+    }, 15000);
+
+    // Delivered after 30 seconds
+    setTimeout(() => {
+      updateOrderStatus(orderId, 'delivered');
+    }, 30000);
+  };
+
+  const updateOrderStatus = (orderId: string, status: OrderStatus) => {
+    setOrders(prev => {
+      const updated = prev.map(o => 
+        o.id === orderId ? { ...o, status } : o
+      );
+      if (user) {
+        localStorage.setItem(`healthfood_orders_${user.id}`, JSON.stringify(updated));
+      }
+      return updated;
+    });
   };
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -104,6 +152,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       updateQuantity,
       clearCart,
       placeOrder,
+      updateOrderStatus,
       totalItems,
       totalPrice
     }}>
