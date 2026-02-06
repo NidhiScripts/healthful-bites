@@ -10,8 +10,6 @@ import {
   YAxis,
 } from 'recharts';
 
-import BarcodeScanner from './components/BarcodeScanner';
-import BarcodeResult from './components/BarcodeResult';
 import ProductSearch from './components/ProductSearch';
 import ProductComparison from './components/ProductComparison';
 import DietTracker from './components/DietTracker';
@@ -61,8 +59,6 @@ function App() {
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const [isItemFocused, setIsItemFocused] = useState(false);
 
-  const [showScanner, setShowScanner] = useState(false);
-  const [scannedProduct, setScannedProduct] = useState<BarcodeProduct | null>(null);
   const [searchedProduct, setSearchedProduct] = useState<BarcodeProduct | null>(null);
 
   const [activeTab, setActiveTab] =
@@ -70,7 +66,7 @@ function App() {
 
   // Product comparison state
   const [comparisonProducts, setComparisonProducts] = useState<BarcodeProduct[]>([]);
-  
+
   // Diet tracker state
   const [dietItems, setDietItems] = useState<any[]>([]);
 
@@ -94,15 +90,6 @@ function App() {
 
   /* ---------------- HANDLERS ---------------- */
 
-  const handleBarcodeScan = (barcode: string) => {
-    const product = lookupProductByBarcode(barcode);
-    if (product) {
-      setScannedProduct(product);
-      setShowScanner(false);
-    } else {
-      alert('Product not found');
-    }
-  };
 
   // Product comparison handlers
   const handleRemoveProduct = (productId: string) => {
@@ -123,7 +110,7 @@ function App() {
   };
 
   const handleUpdateQuantity = (barcode: string, quantity: number) => {
-    setDietItems(prev => prev.map(item => 
+    setDietItems(prev => prev.map(item =>
       item.barcode === barcode ? { ...item, quantity } : item
     ));
   };
@@ -144,11 +131,10 @@ function App() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
-              className={`flex-1 rounded-xl py-3 font-bold ${
-                activeTab === tab
+              className={`flex-1 rounded-xl py-3 font-bold ${activeTab === tab
                   ? 'bg-indigo-600 text-white'
                   : 'bg-slate-100'
-              }`}
+                }`}
             >
               {tab.toUpperCase()}
             </button>
@@ -162,12 +148,6 @@ function App() {
 
           <ProductSearch onProductSelect={setSearchedProduct} />
 
-          <button
-            onClick={() => setShowScanner(true)}
-            className="mt-4 rounded-xl bg-green-600 px-6 py-3 text-white font-bold"
-          >
-            Scan Barcode
-          </button>
 
           <div className="mt-6">
             <select
@@ -219,7 +199,7 @@ function App() {
 
       {/* ---------------- COMPARE ---------------- */}
       {activeTab === 'compare' && (
-        <ProductComparison 
+        <ProductComparison
           products={comparisonProducts}
           onRemoveProduct={handleRemoveProduct}
           onClearAll={handleClearComparison}
@@ -228,7 +208,7 @@ function App() {
 
       {/* ---------------- DIET ---------------- */}
       {activeTab === 'diet' && (
-        <DietTracker 
+        <DietTracker
           items={dietItems}
           onAddItem={handleAddDietItem}
           onRemoveItem={handleRemoveDietItem}
@@ -237,31 +217,18 @@ function App() {
         />
       )}
 
-      {/* ---------------- MODALS ---------------- */}
-      {showScanner && (
-        <BarcodeScanner
-          onScanComplete={handleBarcodeScan}
-          onClose={() => setShowScanner(false)}
-        />
-      )}
-
-      {scannedProduct && (
-        <BarcodeResult
-          product={scannedProduct}
-          onClose={() => setScannedProduct(null)}
-          onScanAnother={() => {
-            setScannedProduct(null);
-            setShowScanner(true);
-          }}
-        />
-      )}
-
       {searchedProduct && (
-        <BarcodeResult
-          product={searchedProduct}
-          onClose={() => setSearchedProduct(null)}
-          onScanAnother={() => setSearchedProduct(null)}
-        />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6">
+          <div className="bg-white rounded-3xl p-8 max-w-lg w-full">
+            <h2 className="text-3xl font-bold mb-4">{searchedProduct.name}</h2>
+            <button
+              onClick={() => setSearchedProduct(null)}
+              className="mt-4 w-full bg-indigo-600 text-white py-3 rounded-xl font-bold"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

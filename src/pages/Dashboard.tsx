@@ -5,7 +5,7 @@ import { foodItems, FoodItem } from '@/data/foodData';
 import { FoodCard } from '@/components/FoodCard';
 import { SearchFilter } from '@/components/SearchFilter';
 import { BottomNav } from '@/components/BottomNav';
-import { Cookie, Sunrise, UtensilsCrossed, TrendingUp, BarChart3 } from 'lucide-react';
+import { Cookie, Sunrise, UtensilsCrossed, TrendingUp, BarChart3, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -26,11 +26,16 @@ const categories = [
 ];
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category') || 'all';
-  
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   const [filters, setFilters] = useState<FilterValues>({
     search: '',
     calories: [0, 800],
@@ -89,7 +94,7 @@ const Dashboard = () => {
                 {user?.name?.split(' ')[0]} 👋
               </h1>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 onClick={() => navigate('/comparison')}
@@ -97,6 +102,15 @@ const Dashboard = () => {
               >
                 <BarChart3 className="w-4 h-4" />
                 Compare Brands
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                className="text-muted-foreground hover:text-destructive transition-colors"
+                title="Logout"
+              >
+                <LogOut className="w-5 h-5" />
               </Button>
               <div className="lg:w-96">
                 <SearchFilter filters={filters} onFilterChange={setFilters} />

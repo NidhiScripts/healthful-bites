@@ -16,6 +16,11 @@ import dahiPuriImg from "@/assets/foods/dahi-puri_user.jpg";
 import springRollsImg from "@/assets/foods/spring-rolls.jpg";
 import kachoriImg from "@/assets/foods/kachori_user.jpg";
 import vadaPavImg from "@/assets/foods/vada-pav.jpg";
+import amulButterImg from "@/assets/foods/amul-butter.png";
+import hideSeekImg from "@/assets/foods/hide-seek.png";
+import kurkureImg from "@/assets/foods/kurkure.png";
+import maggiImg from "@/assets/foods/maggi-noodles.png";
+import tropicanaImg from "@/assets/foods/tropicana.png";
 
 export interface FoodItem {
   id: string;
@@ -29,12 +34,20 @@ export interface FoodItem {
     sugar: number;
     fat: number;
     protein: number;
+    // Extended fields for scanner
+    carbohydrates?: number;
+    sodium?: number;
+    fiber?: number;
   };
   healthScore: number;
   healthStatus: 'safe' | 'moderate' | 'high-risk';
   badges: string[];
   healthNote: string;
   ingredients: string[];
+  // Extended fields for scanner
+  brand?: string;
+  servingSize?: string;
+  allergens?: string[];
 }
 
 export const foodItems: FoodItem[] = [
@@ -432,6 +445,67 @@ export const foodItems: FoodItem[] = [
     badges: ['High Protein', 'Grilled'],
     healthNote: 'Excellent protein source. Grilled preparation is healthy.',
     ingredients: ['Chicken', 'Yogurt', 'Ginger Garlic Paste', 'Red Chili', 'Turmeric', 'Garam Masala', 'Lemon', 'Mustard Oil']
+  },
+  // Packed Products (Snacks)
+  {
+    id: 'maggi-2min',
+    name: 'Maggi 2-Minute Noodles',
+    brand: 'Maggi',
+    category: 'snacks',
+    description: 'Favorite Indian instant masala noodles',
+    price: 15,
+    image: maggiImg,
+    nutrition: { calories: 380, sugar: 2, fat: 15, protein: 8, carbohydrates: 56, sodium: 850 },
+    healthScore: 4,
+    healthStatus: 'high-risk',
+    badges: ['Instant', 'Popular'],
+    healthNote: 'High in sodium and refined flour. Best consumed occasionally.',
+    ingredients: ['Refined Wheat Flour', 'Palm Oil', 'Salt', 'Spices', 'Minerals']
+  },
+  {
+    id: 'kurkure-masala',
+    name: 'Kurkure Masala Munch',
+    brand: 'Kurkure',
+    category: 'snacks',
+    description: 'Crunchy corn and rice meal snack with Indian spices',
+    price: 20,
+    image: "https://m.media-amazon.com/images/I/71LyKlizpuL._AC_UF894,1000_QL80_.jpg",
+    nutrition: { calories: 270, sugar: 2, fat: 15, protein: 3, carbohydrates: 30, sodium: 600 },
+    healthScore: 3,
+    healthStatus: 'high-risk',
+    badges: ['Crunchy', 'Spicy'],
+    healthNote: 'High in fat and spices. Moderate portion size recommended.',
+    ingredients: ['Rice Meal', 'Corn Meal', 'Gram Meal', 'Edible Vegetable Oil', 'Spices']
+  },
+  {
+    id: 'hide-seek-cookies',
+    name: 'Hide & Seek Biscuits',
+    brand: 'Parle',
+    category: 'snacks',
+    description: 'Chocolate chip cookies for a rich chocolatey experience',
+    price: 30,
+    image: "http://themintleaves.com/cdn/shop/products/Parle-Hide-seek_7c34205a-0202-4777-83d3-5041c2884dfb_1200x1200.png?v=1619599543",
+    nutrition: { calories: 480, sugar: 25, fat: 20, protein: 6, carbohydrates: 72, sodium: 250 },
+    healthScore: 5,
+    healthStatus: 'moderate',
+    badges: ['Chocolate', 'Eggless'],
+    healthNote: 'High in sugar and calories. Good for a quick treat.',
+    ingredients: ['Wheat Flour', 'Chocolate Chips', 'Sugar', 'Vegetable Oil']
+  },
+  {
+    id: 'amul-butter-100',
+    name: 'Amul Pasteurised Butter',
+    brand: 'Amul',
+    category: 'breakfast',
+    description: 'Authentic Indian butter made from fresh cream',
+    price: 55,
+    image: amulButterImg,
+    nutrition: { calories: 720, sugar: 0, fat: 80, protein: 0, carbohydrates: 0, sodium: 800 },
+    healthScore: 6,
+    healthStatus: 'moderate',
+    badges: ['Dairy', 'Legacy'],
+    healthNote: 'Pure fat source. Limit daily consumption.',
+    ingredients: ['Milk Fat', 'Salt', 'Milk Solids', 'Annatto Color']
   }
 ];
 
