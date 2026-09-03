@@ -1,267 +1,177 @@
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, LogOut, Package, TrendingUp, Flame } from 'lucide-react';
+import { ArrowLeft, LogOut, Package, TrendingUp, Flame, ShieldAlert, Check, UserCheck, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
-import { BottomNav } from '@/components/BottomNav';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, LineChart, Line, Tooltip } from 'recharts';
-import { format, subDays, parseISO, isWithinInterval } from 'date-fns';
-import { useMemo } from 'react';
-import { formatPrice } from '@/data/foodData';
-import { cn } from '@/lib/utils';
+import Navbar from '@/components/Navbar';
+import { DEFAULT_USER_PREFERENCES, UserHealthPreferences } from '@/utils/healthSafety';
+import { toast } from 'sonner';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { orders } = useCart();
+
+  const [preferences, setPreferences] = useState<UserHealthPreferences>(() => {
+    const saved = localStorage.getItem('user_health_prefs');
+    return saved ? JSON.parse(saved) : DEFAULT_USER_PREFERENCES;
+  });
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
-  // Calculate weekly nutrition data
-  const weeklyData = useMemo(() => {
-    const last7Days = Array.from({ length: 7 }, (_, i) => {
-      const date = subDays(new Date(), 6 - i);
-      return {
-        date: format(date, 'EEE'),
-        fullDate: date,
-        calories: 0,
-        healthScore: 0,
-        orderCount: 0
-      };
-    });
-
-    orders.forEach(order => {
-      const orderDate = parseISO(order.date);
-      last7Days.forEach(day => {
-        if (isWithinInterval(orderDate, {
-          start: new Date(day.fullDate.setHours(0, 0, 0, 0)),
-          end: new Date(day.fullDate.setHours(23, 59, 59, 999))
-        })) {
-          order.items.forEach(item => {
-            day.calories += item.nutrition.calories * item.quantity;
-            day.healthScore += item.healthScore * item.quantity;
-            day.orderCount += item.quantity;
-          });
-        }
-      });
-    });
-
-    return last7Days.map(day => ({
-      ...day,
-      avgHealthScore: day.orderCount > 0 ? Math.round((day.healthScore / day.orderCount) * 10) / 10 : 0
-    }));
-  }, [orders]);
-
-  const totalOrders = orders.length;
-  const totalSpent = orders.reduce((sum, o) => sum + o.total, 0);
-  const avgHealthScore = useMemo(() => {
-    if (orders.length === 0) return 0;
-    let total = 0;
-    let count = 0;
-    orders.forEach(order => {
-      order.items.forEach(item => {
-        total += item.healthScore * item.quantity;
-        count += item.quantity;
-      });
-    });
-    return count > 0 ? Math.round((total / count) * 10) / 10 : 0;
-  }, [orders]);
+  const togglePref = (category: keyof UserHealthPreferences, key: string) => {
+    const updated = {
+      ...preferences,
+      [category]: {
+        ...(preferences[category] as any),
+        [key]: !(preferences[category] as any)[key]
+      }
+    };
+    setPreferences(updated);
+    localStorage.setItem('user_health_prefs', JSON.stringify(updated));
+    toast.success('Health preferences updated!');
+  };
 
   return (
-    <div className="min-h-screen bg-background pb-24 lg:pb-8">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border/50">
-        <div className="px-4 py-4 max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-10 h-10 rounded-full bg-card flex items-center justify-center border border-border"
-            >
-              <ArrowLeft className="w-5 h-5 text-foreground" />
-            </button>
-            <h1 className="text-xl lg:text-2xl font-display font-bold text-foreground">Profile</h1>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-16">
+      <Navbar />
+
+      <main className="container mx-auto max-w-4xl px-4 py-8 space-y-8">
+        
+        {/* User Card */}
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white font-extrabold text-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              {user?.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                {user?.name || 'Health Enthusiast'}
+              </h1>
+              <p className="text-sm text-slate-500">{user?.email || 'user@example.com'}</p>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  Active Health Profile
+                </span>
+              </div>
+            </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={handleLogout}>
-            <LogOut className="w-5 h-5" />
+
+          <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200">
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out</span>
           </Button>
         </div>
-      </header>
 
-      <main className="px-4 py-6 max-w-4xl mx-auto">
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-          {/* Left Column */}
-          <div className="lg:col-span-1">
-            {/* User Info */}
-            <div className="bg-card rounded-2xl p-6 border border-border mb-6 animate-slide-up">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl lg:text-3xl font-bold text-primary-foreground">
-                  {user?.name?.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h2 className="text-xl lg:text-2xl font-display font-bold text-foreground">{user?.name}</h2>
-                  <p className="text-muted-foreground">{user?.email}</p>
-                </div>
-              </div>
-            </div>
+        {/* Dietary & Health Preference Settings */}
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 dark:border-slate-700 space-y-6">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <ShieldAlert className="w-5 h-5 text-emerald-600" />
+              <span>Dietary & Nutrition Preferences</span>
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Selecting your preferences automatically triggers non-medical warnings when scanning or comparing food products.
+            </p>
+          </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-3 gap-3 mb-6">
-              <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '50ms' }}>
-                <Package className="w-6 h-6 mx-auto mb-2 text-primary" />
-                <p className="text-2xl font-bold text-foreground">{totalOrders}</p>
-                <p className="text-xs text-muted-foreground">Orders</p>
-              </div>
-              <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '100ms' }}>
-                <Flame className="w-6 h-6 mx-auto mb-2 text-secondary" />
-                <p className="text-xl font-bold text-foreground">{formatPrice(totalSpent)}</p>
-                <p className="text-xs text-muted-foreground">Spent</p>
-              </div>
-              <div className="bg-card rounded-2xl p-4 border border-border text-center animate-slide-up" style={{ animationDelay: '150ms' }}>
-                <TrendingUp className="w-6 h-6 mx-auto mb-2 text-safe" />
-                <p className="text-2xl font-bold text-foreground">{avgHealthScore}</p>
-                <p className="text-xs text-muted-foreground">Avg Score</p>
-              </div>
+          {/* Dietary Restrictions */}
+          <div className="space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Dietary Choices</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { key: 'vegetarian', label: 'Vegetarian' },
+                { key: 'vegan', label: 'Vegan' },
+                { key: 'glutenFree', label: 'Gluten Free' },
+                { key: 'lactoseFree', label: 'Lactose Free' },
+              ].map((item) => {
+                const active = preferences.dietary[item.key as keyof UserHealthPreferences['dietary']];
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => togglePref('dietary', item.key)}
+                    className={`p-3.5 rounded-2xl border text-xs font-semibold flex items-center justify-between transition-all ${
+                      active
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-sm'
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {active && <Check className="w-4 h-4 text-emerald-600" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Right Column */}
-          <div className="lg:col-span-2">
-
-        {/* Weekly Calories Chart */}
-        {orders.length > 0 && (
-          <div className="bg-card rounded-2xl p-5 border border-border mb-6 animate-slide-up" style={{ animationDelay: '200ms' }}>
-            <h3 className="font-display font-bold text-foreground mb-4">Weekly Calories</h3>
-            <div className="h-40 lg:h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={weeklyData}>
-                  <XAxis 
-                    dataKey="date" 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                  />
-                  <YAxis hide />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '12px',
-                      boxShadow: 'var(--shadow-md)'
-                    }}
-                    labelStyle={{ color: 'hsl(var(--foreground))' }}
-                  />
-                  <Bar dataKey="calories" radius={[8, 8, 0, 0]} fill="hsl(var(--chart-calories))" />
-                </BarChart>
-              </ResponsiveContainer>
+          {/* Nutrition Preferences */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Nutrition Targets</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { key: 'lowSugar', label: 'Low Sugar (<10g)' },
+                { key: 'lowSodium', label: 'Low Sodium (<500mg)' },
+                { key: 'highProtein', label: 'High Protein' },
+                { key: 'lowFat', label: 'Low Fat' },
+              ].map((item) => {
+                const active = preferences.nutrition[item.key as keyof UserHealthPreferences['nutrition']];
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => togglePref('nutrition', item.key)}
+                    className={`p-3.5 rounded-2xl border text-xs font-semibold flex items-center justify-between transition-all ${
+                      active
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-sm'
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {active && <Check className="w-4 h-4 text-emerald-600" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
-        )}
 
-        {/* Health Score Trend */}
-        {orders.length > 0 && (
-          <div className="bg-card rounded-2xl p-5 border border-border mb-6 animate-slide-up" style={{ animationDelay: '250ms' }}>
-            <h3 className="font-display font-bold text-foreground mb-4">Health Score Trend</h3>
-            <div className="h-32 lg:h-40">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={weeklyData}>
-                  <XAxis 
-                    dataKey="date" 
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                  />
-                  <YAxis hide domain={[0, 10]} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '12px',
-                      boxShadow: 'var(--shadow-md)'
-                    }}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="avgHealthScore" 
-                    stroke="hsl(var(--safe))" 
-                    strokeWidth={3}
-                    dot={{ fill: 'hsl(var(--safe))', strokeWidth: 0, r: 4 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+          {/* Allergen Filters */}
+          <div className="space-y-3 pt-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Allergen Safety Flags</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {[
+                { key: 'peanuts', label: 'Peanuts' },
+                { key: 'treeNuts', label: 'Tree Nuts' },
+                { key: 'milk', label: 'Milk / Dairy' },
+                { key: 'eggs', label: 'Eggs' },
+                { key: 'soy', label: 'Soy' },
+                { key: 'gluten', label: 'Gluten / Wheat' },
+              ].map((item) => {
+                const active = preferences.allergens[item.key as keyof UserHealthPreferences['allergens']];
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => togglePref('allergens', item.key)}
+                    className={`p-3.5 rounded-2xl border text-xs font-semibold flex items-center justify-between transition-all ${
+                      active
+                        ? 'bg-amber-50 text-amber-900 border-amber-300 shadow-sm'
+                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {active && <Check className="w-4 h-4 text-amber-600" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
-        )}
 
-        {/* Order History */}
-        <div className="animate-slide-up" style={{ animationDelay: '300ms' }}>
-          <h3 className="font-display font-bold text-foreground mb-4">Order History</h3>
-          {orders.length > 0 ? (
-            <div className="space-y-3">
-              {orders.slice().reverse().map((order, index) => (
-                <button
-                  key={order.id}
-                  onClick={() => navigate(`/order/${order.id}`)}
-                  className="w-full bg-card rounded-2xl p-4 border border-border text-left hover:border-primary/50 transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground">
-                        {format(parseISO(order.date), 'MMM d, yyyy • h:mm a')}
-                      </span>
-                      <span className={cn(
-                        "text-xs px-2 py-0.5 rounded-full font-medium",
-                        order.status === 'delivered' ? "bg-safe/20 text-safe" :
-                        order.status === 'out_for_delivery' ? "bg-primary/20 text-primary" :
-                        order.status === 'preparing' ? "bg-secondary/20 text-secondary" :
-                        "bg-muted text-muted-foreground"
-                      )}>
-                        {order.status === 'out_for_delivery' ? 'On the way' : 
-                         order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                      </span>
-                    </div>
-                    <span className="font-bold text-foreground">{formatPrice(order.total)}</span>
-                  </div>
-                  <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="flex-shrink-0">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    {order.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}
-                  </p>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-card rounded-2xl p-8 border border-border text-center">
-              <Package className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-              <h4 className="font-semibold text-foreground mb-2">No orders yet</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Start ordering healthy meals to see your history here!
-              </p>
-              <Button variant="gradient" onClick={() => navigate('/dashboard')}>
-                Browse Menu
-              </Button>
-            </div>
-          )}
         </div>
-          </div>
-        </div>
+
       </main>
-
-      {/* Bottom Nav - hidden on desktop */}
-      <div className="lg:hidden">
-        <BottomNav />
-      </div>
     </div>
   );
 };

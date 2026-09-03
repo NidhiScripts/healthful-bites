@@ -5,8 +5,8 @@ import { FoodItem, formatPrice, getHealthStatusLabel } from '@/data/foodData';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { useCart } from '@/context/CartContext';
-import { toast } from '@/hooks/use-toast';
+import { useDiet } from '@/context/DietContext';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 interface ComparisonProps {
@@ -16,7 +16,7 @@ interface ComparisonProps {
 
 export const Comparison = ({ items, onClose }: ComparisonProps) => {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addFoodToLog } = useDiet();
   const [selectedWinner, setSelectedWinner] = useState<string | null>(null);
 
   if (items.length < 2) {
@@ -48,11 +48,17 @@ export const Comparison = ({ items, onClose }: ComparisonProps) => {
     return { value, isWinner, isLoser };
   };
 
-  const handleAddToCart = (item: FoodItem) => {
-    addToCart(item);
-    toast({
-      title: "Added to cart",
-      description: `${item.name} has been added to your cart.`,
+  const handleLogItem = (item: FoodItem) => {
+    addFoodToLog({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      calories: item.nutrition.calories,
+      protein: item.nutrition.protein,
+      carbs: item.nutrition.carbohydrates || 0,
+      fat: item.nutrition.fat,
+      fiber: item.nutrition.fiber,
+      sodium: item.nutrition.sodium,
     });
   };
 

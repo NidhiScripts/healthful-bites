@@ -1,18 +1,17 @@
-import { BarChart3, User, ShoppingCart } from 'lucide-react';
+import { Search, LayoutDashboard, Scale, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useCart } from '@/context/CartContext';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { icon: BarChart3, label: 'Compare', path: '/comparison' },
-  { icon: ShoppingCart, label: 'Cart', path: '/cart' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+  { icon: Search, label: 'Search', path: '/search' },
+  { icon: Scale, label: 'Compare', path: '/compare' },
   { icon: User, label: 'Profile', path: '/profile' },
 ];
 
 export const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { totalItems } = useCart();
 
   const handleNavClick = (item: typeof navItems[0]) => {
     navigate(item.path);
@@ -23,12 +22,11 @@ export const BottomNav = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl border-t border-border safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl border-t border-border safe-area-bottom md:hidden">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item);
-          const isCart = item.label === 'Cart';
           
           return (
             <button
@@ -41,14 +39,7 @@ export const BottomNav = () => {
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
-              <div className="relative">
-                <Icon className={cn("w-5 h-5", active && "animate-scale-in")} />
-                {isCart && totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-secondary text-secondary-foreground text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                    {totalItems}
-                  </span>
-                )}
-              </div>
+              <Icon className={cn("w-5 h-5", active && "animate-scale-in")} />
               <span className="text-[10px] font-medium">{item.label}</span>
             </button>
           );
@@ -57,3 +48,4 @@ export const BottomNav = () => {
     </nav>
   );
 };
+

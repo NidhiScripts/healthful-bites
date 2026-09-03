@@ -14,12 +14,12 @@ interface DietTrackerProps {
   onClearAll: () => void;
 }
 
-const DietTracker: React.FC<DietTrackerProps> = ({ 
-  items, 
-  onAddItem, 
-  onRemoveItem, 
-  onUpdateQuantity, 
-  onClearAll 
+const DietTracker: React.FC<DietTrackerProps> = ({
+  items,
+  onAddItem,
+  onRemoveItem,
+  onUpdateQuantity,
+  onClearAll
 }) => {
   const [userProfile, setUserProfile] = useState({
     age: 25,
@@ -57,7 +57,7 @@ const DietTracker: React.FC<DietTrackerProps> = ({
   // Calculate BMR and daily calorie needs
   const dailyNeeds = useMemo(() => {
     const { age, gender, weight, height, activityLevel, goal } = userProfile;
-    
+
     // Calculate BMR using Mifflin-St Jeor equation
     let bmr: number;
     if (gender === 'male') {
@@ -199,8 +199,8 @@ const DietTracker: React.FC<DietTrackerProps> = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Age</label>
               <input
                 type="number"
-                value={userProfile.age}
-                onChange={(e) => setUserProfile({...userProfile, age: parseInt(e.target.value) || 25})}
+                value={userProfile.age || ''}
+                onChange={(e) => setUserProfile({ ...userProfile, age: parseInt(e.target.value) || 0 })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
               />
             </div>
@@ -208,7 +208,7 @@ const DietTracker: React.FC<DietTrackerProps> = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Gender</label>
               <select
                 value={userProfile.gender}
-                onChange={(e) => setUserProfile({...userProfile, gender: e.target.value as 'male' | 'female'})}
+                onChange={(e) => setUserProfile({ ...userProfile, gender: e.target.value as 'male' | 'female' })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
               >
                 <option value="male">Male</option>
@@ -219,8 +219,8 @@ const DietTracker: React.FC<DietTrackerProps> = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Weight (kg)</label>
               <input
                 type="number"
-                value={userProfile.weight}
-                onChange={(e) => setUserProfile({...userProfile, weight: parseInt(e.target.value) || 70})}
+                value={userProfile.weight || ''}
+                onChange={(e) => setUserProfile({ ...userProfile, weight: parseInt(e.target.value) || 0 })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
               />
             </div>
@@ -228,8 +228,8 @@ const DietTracker: React.FC<DietTrackerProps> = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Height (cm)</label>
               <input
                 type="number"
-                value={userProfile.height}
-                onChange={(e) => setUserProfile({...userProfile, height: parseInt(e.target.value) || 175})}
+                value={userProfile.height || ''}
+                onChange={(e) => setUserProfile({ ...userProfile, height: parseInt(e.target.value) || 0 })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
               />
             </div>
@@ -237,7 +237,7 @@ const DietTracker: React.FC<DietTrackerProps> = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Activity</label>
               <select
                 value={userProfile.activityLevel}
-                onChange={(e) => setUserProfile({...userProfile, activityLevel: e.target.value as any})}
+                onChange={(e) => setUserProfile({ ...userProfile, activityLevel: e.target.value as any })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
               >
                 <option value="sedentary">Sedentary</option>
@@ -251,7 +251,7 @@ const DietTracker: React.FC<DietTrackerProps> = ({
               <label className="block text-sm font-medium text-slate-700 mb-1">Goal</label>
               <select
                 value={userProfile.goal}
-                onChange={(e) => setUserProfile({...userProfile, goal: e.target.value as any})}
+                onChange={(e) => setUserProfile({ ...userProfile, goal: e.target.value as any })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
               >
                 <option value="lose">Lose Weight</option>
@@ -356,13 +356,12 @@ const DietTracker: React.FC<DietTrackerProps> = ({
           <h3 className="text-lg font-bold text-slate-900 mb-4">Health Recommendations</h3>
           <div className="space-y-3">
             {recommendations.map((rec, index) => (
-              <div 
+              <div
                 key={index}
-                className={`p-4 rounded-xl border-l-4 ${
-                  rec.type === 'success' ? 'bg-green-50 border-green-500' :
-                  rec.type === 'warning' ? 'bg-yellow-50 border-yellow-500' :
-                  'bg-blue-50 border-blue-500'
-                }`}
+                className={`p-4 rounded-xl border-l-4 ${rec.type === 'success' ? 'bg-green-50 border-green-500' :
+                    rec.type === 'warning' ? 'bg-yellow-50 border-yellow-500' :
+                      'bg-blue-50 border-blue-500'
+                  }`}
               >
                 <div className="flex items-start gap-3">
                   <div className="text-2xl">{rec.icon}</div>
@@ -397,7 +396,7 @@ const DietTracker: React.FC<DietTrackerProps> = ({
                     <div className="font-semibold text-slate-900">{item.name}</div>
                     <div className="text-sm text-slate-600">{item.brand} • {item.category}</div>
                     <div className="text-sm text-slate-700">
-                      {Math.round(item.nutrition.calories * item.quantity)} cal • 
+                      {Math.round(item.nutrition.calories * item.quantity)} cal •
                       {Math.round(item.nutrition.protein * item.quantity)}g protein
                     </div>
                   </div>
@@ -405,8 +404,8 @@ const DietTracker: React.FC<DietTrackerProps> = ({
                     <input
                       type="number"
                       min="1"
-                      value={item.quantity}
-                      onChange={(e) => onUpdateQuantity(item.barcode, parseInt(e.target.value) || 1)}
+                      value={item.quantity || ''}
+                      onChange={(e) => onUpdateQuantity(item.barcode, parseInt(e.target.value) || 0)}
                       className="w-20 px-3 py-2 border border-slate-300 rounded-lg text-sm"
                     />
                     <button

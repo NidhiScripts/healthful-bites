@@ -7,10 +7,10 @@ interface ProductComparisonProps {
   onClearAll: () => void;
 }
 
-const ProductComparison: React.FC<ProductComparisonProps> = ({ 
-  products, 
-  onRemoveProduct, 
-  onClearAll 
+const ProductComparison: React.FC<ProductComparisonProps> = ({
+  products,
+  onRemoveProduct,
+  onClearAll
 }) => {
   const getNutritionColor = (value: number, type: 'calories' | 'sugar' | 'sodium') => {
     if (type === 'calories') {
@@ -150,16 +150,74 @@ const ProductComparison: React.FC<ProductComparisonProps> = ({
         </table>
       </div>
 
+      {/* Recommendation Conclusion */}
+      {products.length >= 2 && (
+        <div className="bg-indigo-50 p-8 border-t-2 border-indigo-100 italic">
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center text-4xl shadow-lg flex-shrink-0 animate-pulse">
+              🏆
+            </div>
+            <div>
+              <h3 className="text-2xl font-black text-indigo-900 mb-2 uppercase tracking-tight">Conclusion & Recommendation</h3>
+              {(() => {
+                const scoredProducts = products.map(p => {
+                  // Weighted health score calculation (higher is better)
+                  // Negative factors
+                  const sugarPenalty = p.nutrition.sugar * 4;
+                  const caloriesPenalty = p.nutrition.calories * 0.1;
+                  const sodiumPenalty = p.nutrition.sodium * 0.05;
+                  const fatPenalty = p.nutrition.fat * 2;
+
+                  // Positive factors
+                  const proteinBonus = p.nutrition.protein * 5;
+                  const fiberBonus = p.nutrition.fiber * 10;
+
+                  const score = (proteinBonus + fiberBonus) - (sugarPenalty + caloriesPenalty + sodiumPenalty + fatPenalty);
+                  return { ...p, calculatedScore: score };
+                });
+
+                const winner = scoredProducts.reduce((prev, current) =>
+                  (prev.calculatedScore > current.calculatedScore) ? prev : current
+                );
+
+                const runnerUp = scoredProducts.find(p => p.barcode !== winner.barcode);
+
+                return (
+                  <div className="space-y-3">
+                    <p className="text-xl text-indigo-800 leading-relaxed font-medium">
+                      Based on our nutritional analysis, <span className="font-black text-indigo-600 underline">"{winner.name}"</span> is the <span className="text-emerald-600 font-black">BETTER CHOICE</span> for your health.
+                    </p>
+                    <p className="text-indigo-600/80 text-lg">
+                      It contains significantly
+                      {winner.nutrition.sugar < (runnerUp?.nutrition.sugar || 0) && <span className="font-bold"> less sugar</span>}
+                      {winner.nutrition.protein > (runnerUp?.nutrition.protein || 0) && <span className="font-bold"> and more protein</span>}
+                      {winner.nutrition.fiber > (runnerUp?.nutrition.fiber || 0) && <span className="font-bold"> and more fiber</span>}
+                      compared to the {runnerUp?.name}. Selecting this option supports better blood sugar control and long-term wellness.
+                    </p>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer Summary */}
       {products.length > 0 && (
-        <div className="bg-gray-50 p-4 border-t-2 border-slate-200">
-          <div className="text-sm text-slate-600">
-            <p className="font-semibold mb-2">Quick Tips:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Green values indicate healthier options</li>
-              <li>Compare nutrition facts to make informed choices</li>
-              <li>Click "Remove" to take products out of comparison</li>
-            </ul>
+        <div className="bg-gray-50 p-6 border-t border-slate-200">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+            <div className="text-sm text-slate-600">
+              <p className="font-bold text-slate-900 mb-2 uppercase tracking-wider text-xs">Analysis Guide:</p>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 text-slate-500">
+                <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500"></span> Green: Optimal/Safe range</li>
+                <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-yellow-500"></span> Yellow: Moderate intake</li>
+                <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-red-500"></span> Red: High Risk/Excessive</li>
+                <li className="flex items-center gap-2 font-bold text-indigo-600 italic underline">Recommendation is calculated via weighted algorithm</li>
+              </ul>
+            </div>
+            <div className="text-right italic text-slate-400 text-xs mt-auto">
+              Scoring based on WHO & Nutri-Score standards
+            </div>
           </div>
         </div>
       )}

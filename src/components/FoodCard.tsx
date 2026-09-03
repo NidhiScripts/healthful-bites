@@ -1,10 +1,10 @@
 import { Plus, Star } from 'lucide-react';
 import { FoodItem, formatPrice } from '@/data/foodData';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/context/CartContext';
+import { useDiet } from '@/context/DietContext';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface FoodCardProps {
   item: FoodItem;
@@ -12,15 +12,22 @@ interface FoodCardProps {
 }
 
 export const FoodCard = ({ item, index }: FoodCardProps) => {
-  const { addToCart } = useCart();
+  const { addFoodToLog } = useDiet();
   const navigate = useNavigate();
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleLogFood = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addToCart(item);
-    toast({
-      title: "Added to cart",
-      description: `${item.name} has been added to your cart.`,
+    addFoodToLog({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      servingSize: item.servingSize,
+      calories: item.nutrition.calories,
+      protein: item.nutrition.protein,
+      carbs: item.nutrition.carbohydrates || 0,
+      fat: item.nutrition.fat,
+      fiber: item.nutrition.fiber,
+      sodium: item.nutrition.sodium,
     });
   };
 
@@ -91,8 +98,9 @@ export const FoodCard = ({ item, index }: FoodCardProps) => {
           <Button
             variant="gradient"
             size="icon"
-            onClick={handleAddToCart}
+            onClick={handleLogFood}
             className="rounded-xl h-10 w-10"
+            title="Log Food"
           >
             <Plus className="w-5 h-5" />
           </Button>

@@ -43,7 +43,7 @@ export interface BarcodeProduct {
   servingSize?: string;
 }
 
-const barcodeDatabase: BarcodeProduct[] = [
+export const barcodeDatabase: BarcodeProduct[] = [
   // Instant Noodles
   {
     barcode: "8901058000269",

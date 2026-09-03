@@ -1,14 +1,18 @@
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
-import { CartProvider } from "@/context/CartContext";
+import { ComparisonProvider } from "@/context/ComparisonContext";
+import { DietProvider } from "@/context/DietContext";
+
 import Auth from "./pages/Auth";
-import TestPage from "./pages/TestPage";
+import SearchPage from "./pages/SearchPage";
+import FoodDetail from "./pages/FoodDetail";
+import Dashboard from "./pages/Dashboard";
 import BrandComparisonSimple from "./pages/BrandComparisonSimple";
-import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -17,26 +21,29 @@ const queryClient = new QueryClient();
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/auth" replace />;
   }
   return <>{children}</>;
 };
 
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+const RootRedirect = () => {
   const { isAuthenticated } = useAuth();
-  if (isAuthenticated) {
-    return <Navigate to="/comparison" replace />;
-  }
-  return <>{children}</>;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <SearchPage />;
 };
 
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<PublicRoute><Auth /></PublicRoute>} />
-    <Route path="/test" element={<ProtectedRoute><TestPage /></ProtectedRoute>} />
-    <Route path="/comparison" element={<ProtectedRoute><BrandComparisonSimple /></ProtectedRoute>} />
-    <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+    <Route path="/" element={<RootRedirect />} />
+    <Route path="/auth" element={<Auth />} />
+    <Route path="/search" element={<SearchPage />} />
+    <Route path="/food/:id" element={<FoodDetail />} />
+    <Route path="/compare" element={<BrandComparisonSimple />} />
+    <Route path="/comparison" element={<BrandComparisonSimple />} />
+
+    {/* Protected Routes */}
+    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
     <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
@@ -48,9 +55,11 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <CartProvider>
-            <AppRoutes />
-          </CartProvider>
+          <ComparisonProvider>
+            <DietProvider>
+              <AppRoutes />
+            </DietProvider>
+          </ComparisonProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
